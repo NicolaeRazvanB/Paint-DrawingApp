@@ -1,0 +1,20 @@
+body {
+  background: #d3d3d3;
+}
+
+.drawing-board {
+  position: relative;
+}
+
+.drawing-board > canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px dashed;
+  margin: auto;
+}
+
+#canvas_combined {
+  background-color: transparent;
+  z-index: 1;
+}

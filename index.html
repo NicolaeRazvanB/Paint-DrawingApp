@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>MySketchPad</title>
+  </head>
+  <body>
+    <h1>Welcome to your personal sketchpad</h1>
+    <label>Pen Color</label>
+    <input type="color" id="penColor" />
+    <label>Background Color</label>
+    <input type="color" id="backgroundColor" value="#FFFFFF" />
+    <button type="button" id="clear">Clear</button>
+    <a href="" download="sketch.png">Download Sketch</a>
+    <div class="drawing-board">
+      <canvas id="canvas_background" width="800" height="500"></canvas>
+      <canvas id="canvas_foreground" width="800" height="500"></canvas>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
