@@ -15,6 +15,7 @@ let state = {
   penSize: 10,
   isDrawing: false,
   color: "black",
+  isDrawingShape: "none",
 };
 
 //Freestyle drawing block
@@ -54,7 +55,6 @@ const draw = (x2, y2) => {
 canvas_foreground.addEventListener("mousemove", (event) => {
   draw(event.offsetX, event.offsetY);
 });
-
 // Clear function
 
 document.querySelector("#clear").addEventListener("click", function () {
@@ -117,3 +117,13 @@ backgroundInput.addEventListener("input", () => {
     canvas_background.height
   );
 });
+
+const penSizeChange = (pensize) => {
+  state.penSize = pensize;
+};
+
+//Drawing shapes block
+const drawShape = (shape) => {
+  state.isDrawingShape = shape;
+  console.log(state.isDrawingShape);
+};

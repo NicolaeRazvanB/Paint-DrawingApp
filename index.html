@@ -5,16 +5,50 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+
     <title>MySketchPad</title>
   </head>
   <body>
     <h1>Welcome to your personal sketchpad</h1>
-    <label>Pen Color</label>
-    <input type="color" id="penColor" />
-    <label>Background Color</label>
-    <input type="color" id="backgroundColor" value="#FFFFFF" />
+    <label for="penColor">Pen Color</label>
+    <input type="color" id="penColor" name="penColor" />
+    <label for="backgroundColor">Background Color</label>
+    <input
+      type="color"
+      id="backgroundColor"
+      name="backgroundColor"
+      value="#FFFFFF"
+    />
     <button type="button" id="clear">Clear</button>
     <a href="" download="sketch.png">Download Sketch</a>
+    <label for="penSize">Pen Size</label>
+    <input
+      type="number"
+      id="penSize"
+      name="penSize"
+      min="10"
+      max="100"
+      step="2.5"
+      value="2.5"
+      onchange="penSizeChange(this.value)"
+    />
+    <div id="shapes">
+      <button type="button" value="line" onclick="drawShape(this.value)">
+        Line
+      </button>
+      <button type="button" value="square" onclick="drawShape(this.value)">
+        Square
+      </button>
+      <button type="button" value="rectangular" onclick="drawShape(this.value)">
+        Rectangular
+      </button>
+      <button type="button" value="triangle" onclick="drawShape(this.value)">
+        Triangle
+      </button>
+      <button type="button" value="circle" onclick="drawShape(this.value)">
+        Circle
+      </button>
+    </div>
     <div class="drawing-board">
       <canvas id="canvas_background" width="800" height="500"></canvas>
       <canvas id="canvas_foreground" width="800" height="500"></canvas>
