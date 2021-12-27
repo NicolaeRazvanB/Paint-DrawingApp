@@ -1,129 +1,178 @@
-let canvas_foreground = document.querySelector("#canvas_foreground");
-let ctx_foreground = canvas_foreground.getContext("2d");
-let canvas_background = document.querySelector("#canvas_background");
-let ctx_background = canvas_background.getContext("2d");
-
-ctx_background.fillStyle = "white";
-ctx_background.fillRect(
-  0,
-  0,
-  canvas_background.width,
-  canvas_background.height
-);
-
-let state = {
-  penSize: 10,
-  isDrawing: false,
+//Initial setup
+let canvas = document.querySelector("#board");
+let ctx = canvas.getContext("2d");
+let W = canvas.width;
+let H = canvas.height;
+let history = []; //Array of objects that have been drawn
+let mx = 0,
+  my = 0,
+  smx = 0,
+  smy = 0;
+let baseShape = {
+  name: "rectangular",
   color: "black",
-  isDrawingShape: "none",
+  width: 2.5,
+  x: 0,
+  y: 0,
+  w: 0,
+  h: 0,
+};
+let shape = {
+  name: "rectangular",
+  color: "black",
+  width: 2.5,
+  x: 0,
+  y: 0,
+  w: 0,
+  h: 0,
+};
+let state = {
+  penSize: 2.5,
+  penColor: "black",
+  backgroundColor: "white",
+  isDrawing: false,
+  shape: "rectangular",
 };
 
-//Freestyle drawing block
-canvas_foreground.addEventListener("mousedown", (e) => {
-  state.isDrawing = true;
-  x = e.offsetX;
-  y = e.offsetY;
-});
-canvas_foreground.addEventListener("mouseup", () => {
-  state.isDrawing = false;
-  x = undefined;
-  y = undefined;
-});
-
-const drawLine = (x1, y1, x2, y2) => {
-  ctx_foreground.beginPath();
-  ctx_foreground.moveTo(x1, y1);
-  ctx_foreground.lineTo(x2, y2);
-  ctx_foreground.strokeStyle = state.color;
-  ctx_foreground.lineWidth = state.penSize * 2;
-  ctx_foreground.stroke();
-};
-
-const draw = (x2, y2) => {
-  if (state.isDrawing) {
-    ctx_foreground.fillStyle = state.color;
-    ctx_foreground.beginPath();
-    ctx_foreground.arc(x2, y2, state.penSize, 0, Math.PI * 2);
-    ctx_foreground.closePath();
-    ctx_foreground.fill();
-    drawLine(x, y, x2, y2);
-  }
-  x = x2;
-  y = y2;
-};
-
-canvas_foreground.addEventListener("mousemove", (event) => {
-  draw(event.offsetX, event.offsetY);
-});
+//TOOLS AND BUTTONS
 // Clear function
-
 document.querySelector("#clear").addEventListener("click", function () {
-  ctx_foreground.clearRect(
-    0,
-    0,
-    canvas_foreground.width,
-    canvas_foreground.height
-  );
-  ctx_background.clearRect(
-    0,
-    0,
-    canvas_background.width,
-    canvas_background.height
-  );
-  ctx_background.fillStyle = "white";
-  ctx_background.fillRect(
-    0,
-    0,
-    canvas_background.width,
-    canvas_background.height
-  );
-
+  history = [];
+  state.backgroundColor = "#FFFFFF";
   document.querySelector("#backgroundColor").value = "#FFFFFF";
 });
 
 //Download as PNG function
-document.querySelector("a").addEventListener("click", (event) => {
-  ctx_background.drawImage(canvas_foreground, 0, 0);
-  event.target.href = canvas_background.toDataURL();
-  ctx_background.clearRect(
-    0,
-    0,
-    canvas_background.width,
-    canvas_background.height
-  );
-  ctx_background.fillStyle = document.querySelector("#backgroundColor").value;
-  ctx_background.fillRect(
-    0,
-    0,
-    canvas_background.width,
-    canvas_background.height
-  );
+document.getElementById("downloadSketch").addEventListener("click", (event) => {
+  let link = document.createElement("a");
+  link.download = "sketch.png";
+  link.href = canvas.toDataURL();
+  link.click();
 });
 
 //Color pickers for pen and background
 
 let colorInput = document.querySelector("#penColor");
 colorInput.addEventListener("input", () => {
-  state.color = colorInput.value;
+  state.penColor = colorInput.value;
+  shape.color = colorInput.value;
 });
 
 let backgroundInput = document.querySelector("#backgroundColor");
 backgroundInput.addEventListener("input", () => {
-  ctx_background.fillStyle = backgroundInput.value;
-  ctx_background.fillRect(
-    0,
-    0,
-    canvas_background.width,
-    canvas_background.height
-  );
+  state.backgroundColor = backgroundInput.value;
 });
 
 const penSizeChange = (pensize) => {
   state.penSize = pensize;
+  shape.width = pensize;
+};
+//SHAPE type handle
+const setShape = (shapeName) => {
+  state.shape = shapeName;
+  shape.name = shapeName;
+  if (shapeName === "line") {
+    document.getElementById("line").style.backgroundColor = "rgb(0, 204, 102)";
+    document.getElementById("rectangular").style.backgroundColor = "aquamarine";
+    document.getElementById("ellipse").style.backgroundColor = "aquamarine";
+  }
+
+  if (shapeName === "rectangular") {
+    document.getElementById("line").style.backgroundColor = "aquamarine";
+    document.getElementById("rectangular").style.backgroundColor =
+      "rgb(0, 204, 102)";
+    document.getElementById("ellipse").style.backgroundColor = "aquamarine";
+  }
+  if (shapeName === "ellipse") {
+    document.getElementById("line").style.backgroundColor = "aquamarine";
+    document.getElementById("rectangular").style.backgroundColor = "aquamarine";
+    document.getElementById("ellipse").style.backgroundColor =
+      "rgb(0, 204, 102)";
+  }
 };
 
-//Drawing shapes block
-const drawShape = (shape) => {
-  state.isDrawingShape = shape;
-  console.log(state.isDrawingShape);
+//DRAWING function
+drawModel = (model) => {
+  ctx.strokeStyle = model.color;
+  ctx.lineWidth = model.width;
+
+  if (model.name === "rectangular") {
+    ctx.strokeRect(model.x, model.y, model.w, model.h);
+  }
+  if (model.name === "line") {
+    ctx.beginPath();
+    ctx.moveTo(model.sx, model.sy);
+    ctx.lineTo(model.x, model.y);
+    ctx.stroke();
+  }
+  if (model.name === "ellipse") {
+    ctx.beginPath();
+    ctx.ellipse(
+      model.x + model.w / 2,
+      model.y - model.h / 2,
+      model.w,
+      model.h,
+      0,
+      0,
+      2 * Math.PI
+    );
+    ctx.stroke();
+  }
 };
+
+//Animation block
+initModel = () => {
+  //Clear drawing-board
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = state.backgroundColor;
+  ctx.fillRect(0, 0, W, H);
+  //Re-draw models from history array
+  if (history.length !== 0) {
+    history.forEach((item) => {
+      drawModel(item);
+    });
+  }
+  requestAnimationFrame(initModel);
+};
+
+updateModel = () => {
+  if (JSON.stringify(shape) !== JSON.stringify(baseShape)) history.push(shape);
+  history = [...new Set(history)];
+};
+setInterval(updateModel, 10);
+
+//Events handlers for drawing
+document.addEventListener("mousemove", (e) => {
+  mx = Math.round(e.x - canvas.getBoundingClientRect().x);
+  my = Math.round(e.y - canvas.getBoundingClientRect().y);
+
+  if (state.isDrawing) {
+    if (state.shape === "rectangular" || state.shape === "ellipse") {
+      shape.x = Math.min(smx, mx);
+      shape.y = Math.min(smy, my);
+      shape.w = Math.abs(mx - smx);
+      shape.h = Math.abs(my - smy);
+    }
+    if (state.shape === "line") {
+      shape.sx = smx;
+      shape.sy = smy;
+      shape.x = mx;
+      shape.y = my;
+    }
+  }
+});
+
+canvas.addEventListener("mousedown", (e) => {
+  state.isDrawing = true;
+  smx = mx;
+  smy = my;
+});
+canvas.addEventListener("mouseup", (e) => {
+  state.isDrawing = false;
+  shape = JSON.parse(JSON.stringify(baseShape));
+  shape.color = state.penColor;
+  shape.width = state.penSize;
+  shape.name = state.shape;
+});
+
+initModel(); //Running the animation function

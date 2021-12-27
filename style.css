@@ -14,7 +14,9 @@ body {
   margin: auto;
 }
 
-#canvas_combined {
-  background-color: transparent;
-  z-index: 1;
+#shapes * {
+  background-color: aquamarine;
+}
+#rectangular {
+  background-color: rgb(0, 204, 102);
 }

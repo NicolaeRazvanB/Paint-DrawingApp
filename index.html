@@ -20,38 +20,47 @@
       value="#FFFFFF"
     />
     <button type="button" id="clear">Clear</button>
-    <a href="" download="sketch.png">Download Sketch</a>
+    <button id="downloadSketch">Download Sketch</button>
+
     <label for="penSize">Pen Size</label>
     <input
       type="number"
       id="penSize"
       name="penSize"
-      min="10"
+      min="2.5"
       max="100"
       step="2.5"
       value="2.5"
       onchange="penSizeChange(this.value)"
     />
     <div id="shapes">
-      <button type="button" value="line" onclick="drawShape(this.value)">
-        Line
-      </button>
-      <button type="button" value="square" onclick="drawShape(this.value)">
-        Square
-      </button>
-      <button type="button" value="rectangular" onclick="drawShape(this.value)">
+      <button
+        type="button"
+        value="rectangular"
+        id="rectangular"
+        onclick="setShape(this.value)"
+      >
         Rectangular
       </button>
-      <button type="button" value="triangle" onclick="drawShape(this.value)">
-        Triangle
+      <button
+        type="button"
+        value="line"
+        id="line"
+        onclick="setShape(this.value)"
+      >
+        Line
       </button>
-      <button type="button" value="circle" onclick="drawShape(this.value)">
-        Circle
+      <button
+        type="button"
+        value="ellipse"
+        id="ellipse"
+        onclick="setShape(this.value)"
+      >
+        Ellipse
       </button>
     </div>
     <div class="drawing-board">
-      <canvas id="canvas_background" width="800" height="500"></canvas>
-      <canvas id="canvas_foreground" width="800" height="500"></canvas>
+      <canvas id="board" width="800" height="500"></canvas>
     </div>
     <script src="script.js"></script>
   </body>
