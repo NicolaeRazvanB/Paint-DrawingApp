@@ -136,7 +136,33 @@ initModel = () => {
 };
 
 updateModel = () => {
-  if (JSON.stringify(shape) !== JSON.stringify(baseShape)) history.push(shape);
+  // if (JSON.stringify(shape) !== JSON.stringify(baseShape)) history.push(shape);
+  // history = [...new Set(history)];
+  // console.log(history);
+  if (
+    shape.name === "rectangular" &&
+    shape.x !== 0 &&
+    shape.y !== 0 &&
+    shape.h !== 0 &&
+    shape.w !== 0
+  )
+    history.push(shape);
+  if (
+    shape.name === "ellipse" &&
+    shape.x !== 0 &&
+    shape.y !== 0 &&
+    shape.h !== 0 &&
+    shape.w !== 0
+  )
+    history.push(shape);
+  if (
+    shape.name === "line" &&
+    shape.sx !== 0 &&
+    shape.sy !== 0 &&
+    shape.x !== 0 &&
+    shape.y !== 0
+  )
+    history.push(shape);
   history = [...new Set(history)];
 };
 setInterval(updateModel, 10);
