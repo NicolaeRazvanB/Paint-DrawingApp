@@ -10,29 +10,30 @@
   </head>
   <body>
     <h1>Welcome to your personal sketchpad</h1>
-    <label for="penColor">Pen Color</label>
-    <input type="color" id="penColor" name="penColor" />
-    <label for="backgroundColor">Background Color</label>
-    <input
-      type="color"
-      id="backgroundColor"
-      name="backgroundColor"
-      value="#FFFFFF"
-    />
-    <button type="button" id="clear">Clear</button>
-    <button id="downloadSketch">Download Sketch</button>
-
-    <label for="penSize">Pen Size</label>
-    <input
-      type="number"
-      id="penSize"
-      name="penSize"
-      min="2.5"
-      max="100"
-      step="2.5"
-      value="2.5"
-      onchange="penSizeChange(this.value)"
-    />
+    <div id="tools">
+      <label for="penColor">Pen Color</label>
+      <input type="color" id="penColor" name="penColor" />
+      <label for="backgroundColor">Background Color</label>
+      <input
+        type="color"
+        id="backgroundColor"
+        name="backgroundColor"
+        value="#FFFFFF"
+      />
+      <label for="penSize">Pen Size</label>
+      <input
+        type="number"
+        id="penSize"
+        name="penSize"
+        min="2.5"
+        max="100"
+        step="2.5"
+        value="2.5"
+        onchange="penSizeChange(this.value)"
+      />
+      <button type="button" id="clear">Clear</button>
+      <button id="downloadSketch">Download Sketch</button>
+    </div>
     <div id="shapes">
       <button
         type="button"
@@ -40,7 +41,7 @@
         id="rectangular"
         onclick="setShape(this.value)"
       >
-        Rectangular
+        Rectangle
       </button>
       <button
         type="button"
@@ -59,10 +60,7 @@
         Ellipse
       </button>
     </div>
-    <div class="drawing-board">
-      <canvas id="board" width="800" height="500"></canvas>
-    </div>
-    <div id="sketchList"></div>
+    <canvas id="board" width="800" height="500"></canvas>
     <script src="script.js"></script>
   </body>
 </html>
